@@ -8,15 +8,16 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-// 🔹 Vi berättar tydligt för TypeScript att params har en slug
-export default async function PreviewPage({
-  params,
-}: {
+// 🧩 Lägg till en explicit typning för att kringgå Next.js typ-bugg
+// (params tolkas ibland fel som ett Promise i nya versioner)
+type Props = {
   params: { slug: string };
-}) {
+} & Record<string, any>;
+
+export default async function PreviewPage({ params }: Props) {
   const slug = params.slug;
 
-  // Hämta HTML från Supabase
+  // 🔹 Hämta HTML från Supabase
   const { data, error } = await supabase
     .from("sites")
     .select("html")
@@ -28,7 +29,7 @@ export default async function PreviewPage({
     notFound();
   }
 
-  // Visa HTML som riktig sida
+  // 🔹 Visa HTML som en riktig sida
   return (
     <div className="min-h-screen bg-gray-950 text-white p-10">
       <div
@@ -39,5 +40,5 @@ export default async function PreviewPage({
   );
 }
 
-// 🧠 Lägg till denna — Next kräver den i app router för dynamiska routes
+// Den här raden krävs för dynamiska routes i vissa Next-versioner
 export const dynamicParams = true;
