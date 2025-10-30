@@ -1,18 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 
-// Skapa Supabase-klient
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-type PreviewPageProps = {
-  params: Record<string, string | string[]>;
-};
+interface PageProps {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-export default async function PreviewPage({ params }: PreviewPageProps) {
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+export default async function PreviewPage({ params }: PageProps) {
+  const slug = params.slug;
 
   // 🔹 Hämta HTML från Supabase baserat på slug
   const { data, error } = await supabase
