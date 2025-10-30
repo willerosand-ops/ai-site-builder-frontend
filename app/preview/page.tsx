@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 function PreviewContent() {
+  // Hämta query-parametrar, t.ex. ?html=...
   const searchParams = useSearchParams();
   const html = searchParams.get("html") || "<p>Ingen data hittades.</p>";
 
