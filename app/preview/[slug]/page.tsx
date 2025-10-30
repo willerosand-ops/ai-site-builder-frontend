@@ -7,18 +7,18 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-interface PreviewPageProps {
-  params: {
-    slug: string;
-  };
-}
+type PreviewPageProps = {
+  params: Record<string, string | string[]>;
+};
 
 export default async function PreviewPage({ params }: PreviewPageProps) {
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+
   // 🔹 Hämta HTML från Supabase baserat på slug
   const { data, error } = await supabase
     .from("sites")
     .select("html")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .single();
 
   if (error || !data) {
