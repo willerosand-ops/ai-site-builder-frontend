@@ -1,17 +1,18 @@
-// app/preview/[slug]/page.tsx
 import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 
-// Skapa Supabase-klient
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default async function Page(props: any) {
-  const slug = props.params?.slug as string;
+export default async function PreviewSlugPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-  // Hämta HTML från Supabase
   const { data, error } = await supabase
     .from("sites")
     .select("html")
@@ -19,7 +20,7 @@ export default async function Page(props: any) {
     .single();
 
   if (error || !data) {
-    console.error("Fel vid hämtning:", error);
+    console.error("❌ Fel vid hämtning:", error);
     notFound();
   }
 
@@ -32,6 +33,3 @@ export default async function Page(props: any) {
     </div>
   );
 }
-
-// 👇 Lägg till detta längst ner
-export const dynamicParams = true;

@@ -27,29 +27,21 @@ export async function POST(req: Request) {
       temperature: 0.6,
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: `Skapa en hemsida baserad på idén:\n\n${prompt}` },
+        { role: "user", content: prompt },
       ],
-      max_tokens: 2000,
     });
 
-    let result = completion.choices[0].message?.content || "";
-    result = result.replace(/```html|```/g, "").trim();
+    const html = completion.choices[0]?.message?.content || "";
 
-    // 💾 Spara resultatet i databasen
-    const slug = randomUUID(); // unikt id för sidan
-    const { error } = await supabase.from("sites").insert([
-      {
-        slug: slug,
-        html: result,
-      },
-    ]);
+    // 💾 Spara i Supabase
+    const slug = randomUUID();
+    const { error } = await supabase.from("sites").insert([{ html, slug }]);
 
     if (error) throw error;
 
-    // Skicka tillbaka URL till preview
-    return NextResponse.json({ success: true, slug });
+    return NextResponse.json({ slug });
   } catch (error) {
-    console.error("Fel vid AI-generering:", error);
-    return NextResponse.json({ error: "Fel vid AI-generering." }, { status: 500 });
+    console.error("❌ Fel vid generering:", error);
+    return NextResponse.json({ error: "Något gick fel." }, { status: 500 });
   }
 }
