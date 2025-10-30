@@ -1,30 +1,11 @@
-"use client";
+import dynamic from "next/dynamic";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+// 🧠 Importera client-komponenten utan SSR (server-rendering)
+const PreviewClient = dynamic(() => import("./PreviewClient"), { ssr: false });
 
-// 🚀 Förhindrar Next.js från att försöka pre-rendera sidan
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-function PreviewContent() {
-  const searchParams = useSearchParams();
-  const html = searchParams.get("html") || "<p>Ingen data hittades.</p>";
-
-  return (
-    <div className="min-h-screen bg-gray-950 text-white p-10">
-      <div
-        className="prose prose-invert max-w-4xl mx-auto"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-    </div>
-  );
-}
+export const dynamicParams = true; // tillåter dynamiska routes
+export const revalidate = 0;       // ingen cache
 
 export default function PreviewPage() {
-  return (
-    <Suspense fallback={<div className="text-white p-10">Laddar förhandsvisning...</div>}>
-      <PreviewContent />
-    </Suspense>
-  );
+  return <PreviewClient />;
 }
