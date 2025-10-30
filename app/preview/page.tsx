@@ -3,8 +3,11 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
+// 🚀 Förhindrar Next.js från att försöka pre-rendera sidan
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function PreviewContent() {
-  // Hämta query-parametrar, t.ex. ?html=...
   const searchParams = useSearchParams();
   const html = searchParams.get("html") || "<p>Ingen data hittades.</p>";
 
