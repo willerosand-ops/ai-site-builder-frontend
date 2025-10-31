@@ -1,11 +1,10 @@
 "use client";
 
-import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-function PreviewContent() {
-  const searchParams = useSearchParams();
-  const html = searchParams.get("html");
+export default function PreviewClient() {
+  const params = useSearchParams();
+  const html = params.get("html");
 
   if (!html) {
     return <div className="text-gray-400 p-10">Ingen förhandsvisning att visa.</div>;
@@ -18,13 +17,5 @@ function PreviewContent() {
         dangerouslySetInnerHTML={{ __html: decodeURIComponent(html) }}
       />
     </div>
-  );
-}
-
-export default function PreviewClient() {
-  return (
-    <Suspense fallback={<div className="text-white p-10">Laddar förhandsvisning...</div>}>
-      <PreviewContent />
-    </Suspense>
   );
 }
