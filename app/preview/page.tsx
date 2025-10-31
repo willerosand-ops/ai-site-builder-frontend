@@ -1,11 +1,14 @@
-import dynamic from "next/dynamic";
+"use client";
 
-// 🧠 Importera client-komponenten utan SSR (server-rendering)
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
 const PreviewClient = dynamic(() => import("./PreviewClient"), { ssr: false });
 
-export const dynamicParams = true; // tillåter dynamiska routes
-export const revalidate = 0;       // ingen cache
-
 export default function PreviewPage() {
-  return <PreviewClient />;
+  return (
+    <Suspense fallback={<div className="text-white p-10">Laddar...</div>}>
+      <PreviewClient />
+    </Suspense>
+  );
 }
