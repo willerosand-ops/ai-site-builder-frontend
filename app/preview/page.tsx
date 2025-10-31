@@ -1,13 +1,12 @@
 "use client";
 
 import { Suspense } from "react";
-import loadable from "next/dynamic"; // 👈 byter namn på importen för att undvika konflikt
+import loadable from "next/dynamic";
 
-// ✅ Lazy-ladda PreviewClient – och markera sidan som dynamic
 const PreviewClient = loadable(() => import("./PreviewClient"), { ssr: false });
 
-export const dynamic = "force-dynamic"; // 🧠 hindrar Next från att bygga statiskt
-export const fetchCache = "force-no-store"; // försäkrar att inget cachas
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function PreviewPage() {
   return (
