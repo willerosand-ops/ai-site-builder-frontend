@@ -1,18 +1,19 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabaseClient";
 import { notFound } from "next/navigation";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+export const dynamic = "force-dynamic"; // 🧠 hindrar statisk build
+export const fetchCache = "force-no-store"; // 🔄 alltid färska data
 
-export default async function PreviewSlugPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
+export default async function SlugPage({ params }: PageProps) {
+  const { slug } = params;
+
+  // 🔹 Hämta HTML från Supabase baserat på slug
   const { data, error } = await supabase
     .from("sites")
     .select("html")
@@ -20,10 +21,11 @@ export default async function PreviewSlugPage({
     .single();
 
   if (error || !data) {
-    console.error("❌ Fel vid hämtning:", error);
+    console.error("Fel vid hämtning från Supabase:", error);
     notFound();
   }
 
+  // 🔹 Rendera HTML-innehållet
   return (
     <div className="min-h-screen bg-gray-950 text-white p-10">
       <div
