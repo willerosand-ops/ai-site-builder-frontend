@@ -1,26 +1,21 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
 
 function PreviewContent() {
   const searchParams = useSearchParams();
   const html = searchParams.get("html");
-  const [content, setContent] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (html) setContent(decodeURIComponent(html));
-  }, [html]);
-
-  if (!content) {
-    return <div className="text-gray-300 p-10">Ingen förhandsvisning att visa ännu.</div>;
+  if (!html) {
+    return <div className="text-gray-400 p-10">Ingen förhandsvisning att visa.</div>;
   }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-10">
       <div
         className="prose prose-invert max-w-4xl mx-auto"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: decodeURIComponent(html) }}
       />
     </div>
   );
