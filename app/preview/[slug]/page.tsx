@@ -6,17 +6,17 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-interface PreviewPageProps {
-  params: {
-    slug: string;
-  };
-}
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-export default async function PreviewPage({ params }: PreviewPageProps) {
+export default async function PreviewPage({ params }: Props) {
+  const resolved = await params; // 👈 Vänta in params ifall det är ett Promise
+
   const { data, error } = await supabase
     .from("sites")
     .select("html")
-    .eq("slug", params.slug)
+    .eq("slug", resolved.slug)
     .single();
 
   if (error || !data) {
