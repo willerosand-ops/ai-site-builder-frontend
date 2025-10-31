@@ -1,17 +1,19 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import loadable from "next/dynamic";
 
-// 🧩 Stoppa static generation helt
+// 🧠 Hindrar Next.js från att försöka generera statiskt
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 export async function generateStaticParams() {
   return [];
 }
 
-const PreviewClient = loadable(() => import("./PreviewClient"), { ssr: false });
-
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+// 🧩 Lazy-loada PreviewClient (helt client-side)
+const PreviewClient = dynamic(() => import("./PreviewClient"), {
+  ssr: false,
+});
 
 export default function PreviewPage() {
   return (
