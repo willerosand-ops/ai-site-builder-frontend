@@ -29,16 +29,18 @@ export default function Home() {
       if (!res.ok) throw new Error("Fel vid generering");
 
       const data = await res.json();
+      console.log("🔹 API-svar:", data);
 
-      if (data.slug) {
-        // ✅ Skicka användaren till rätt förhandsvisningssida
-        router.push(`/preview/${data.slug}`);
-
-      } else {
-        throw new Error("Ingen slug returnerades från servern");
+      if (!data.slug) {
+        throw new Error("❌ Ingen slug returnerades från API:t");
       }
+
+      // ✅ Navigera till rätt preview-sida
+      const previewUrl = `/preview/${data.slug}`;
+      console.log("🌐 Navigerar till:", previewUrl);
+      router.push(previewUrl);
     } catch (err) {
-      console.error(err);
+      console.error("⚠️ Fel vid generering:", err);
       setError("Något gick fel! Kontrollera API:et eller försök igen.");
     } finally {
       setLoading(false);
