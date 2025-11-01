@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 // ✅ Fixar Next.js 15-type bug (params tolkades som Promise)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function PreviewPage({ params }: any) {
   const slug = params?.slug;
 
