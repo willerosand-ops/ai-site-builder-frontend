@@ -1,13 +1,11 @@
 import { supabase } from "@/lib/supabaseClient";
 
-interface PreviewPageProps {
-  params: { slug: string };
-}
+// ⛑️ Typfix: använd `any` för params tills Next typdefinitioner uppdateras
+export default async function PreviewPage({ params }: { params: any }) {
+  const slug = params.slug as string;
 
-export default async function PreviewPage({ params }: PreviewPageProps) {
-  const { slug } = params;
+  console.log("🪄 Laddar slug:", slug);
 
-  // 🔍 Hämta rätt rad från Supabase
   const { data, error } = await supabase
     .from("sites")
     .select("html")
@@ -15,7 +13,7 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
     .maybeSingle();
 
   if (error) {
-    console.error("❌ Supabase-fel:", error);
+    console.error("❌ Supabase-fel:", error.message);
   }
 
   if (!data?.html) {
@@ -26,7 +24,6 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
     );
   }
 
-  // ✅ Visa HTML:en
   return (
     <main className="min-h-screen bg-gray-900 text-gray-100">
       <div
