@@ -32,6 +32,7 @@ export default function Home() {
       if (data.slug) {
         // ✅ Skicka användaren till rätt förhandsvisningssida
         router.push(`/preview/${data.slug}`);
+
       } else {
         throw new Error("Ingen slug returnerades från servern");
       }
