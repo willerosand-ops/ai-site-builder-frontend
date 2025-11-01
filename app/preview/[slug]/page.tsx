@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import { supabase } from "@/lib/supabaseClient";
 
 // ⛑️ Typfix: använd `any` för params tills Next typdefinitioner uppdateras
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default async function PreviewPage({ params }: { params: any }) {
   const slug = params.slug as string;
 
