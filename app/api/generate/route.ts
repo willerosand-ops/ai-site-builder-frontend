@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { supabase } from "@/lib/supabaseClient";
 import { randomUUID } from "crypto";
+/* eslint-disable no-console */
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,

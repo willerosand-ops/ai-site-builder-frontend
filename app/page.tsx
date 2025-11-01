@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+/* eslint-disable no-console */
 
 export default function Home() {
   const router = useRouter();
