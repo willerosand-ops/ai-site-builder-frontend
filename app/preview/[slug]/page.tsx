@@ -1,18 +1,31 @@
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import { createClient } from "@supabase/supabase-js";
 
-export default async function PreviewPage({ params }: { params: any }) {
-  const slug = params.slug as string;
+export default async function PreviewPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const slug = params.slug;
   console.log("🪄 Förhandsvisar slug:", slug);
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // 🧩 Skapa Supabase-klient direkt i funktionen
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("❌ Saknas env-variabler i Vercel!");
+    return (
+      <main className="min-h-screen flex items-center justify-center text-red-400">
+        <p>Fel: Supabase-variabler saknas i servern ⚠️</p>
+      </main>
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await supabase
     .from("sites")
