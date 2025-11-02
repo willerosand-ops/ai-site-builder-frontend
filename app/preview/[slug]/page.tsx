@@ -1,10 +1,14 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
+// @ts-ignore
+
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
-/* eslint-disable no-console */
+
 
 import { createClient } from "@supabase/supabase-js";
-
+// @ts-ignore – Nexts PageProps buggar i async-funktioner
 export default async function PreviewPage({
   params,
 }: {
