@@ -2,13 +2,13 @@ export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
+
 import { createClient } from "@supabase/supabase-js";
 
 export default async function PreviewPage({ params }: { params: any }) {
   const slug = params.slug as string;
   console.log("🪄 Förhandsvisar slug:", slug);
 
-  // ✅ Skapa Supabase-klient här (så miljövariablerna laddas korrekt i Vercel)
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
