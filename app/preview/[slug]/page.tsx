@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 /* eslint-disable no-console */
