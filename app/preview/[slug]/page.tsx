@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@supabase/supabase-js";
 
-// ⛑️ Typfix: använd `any` för params tills Next typdefinitioner uppdateras
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export default async function PreviewPage({ params }: { params: any }) {
   const slug = params.slug as string;
+  console.log("🪄 Förhandsvisar slug:", slug);
 
-  console.log("🪄 Laddar slug:", slug);
+  // ✅ Skapa Supabase-klient här (så miljövariablerna laddas korrekt i Vercel)
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const { data, error } = await supabase
     .from("sites")
@@ -20,6 +23,7 @@ export default async function PreviewPage({ params }: { params: any }) {
   }
 
   if (!data?.html) {
+    console.warn("⚠️ Ingen sida hittades för slug:", slug);
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-950 text-gray-300">
         <p>Ingen sida hittades för den här länken 😅</p>
@@ -27,6 +31,7 @@ export default async function PreviewPage({ params }: { params: any }) {
     );
   }
 
+  console.log("✅ Sida hittad och laddad!");
   return (
     <main className="min-h-screen bg-gray-900 text-gray-100">
       <div
