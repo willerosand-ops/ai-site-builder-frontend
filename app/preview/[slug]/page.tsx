@@ -1,25 +1,17 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
-// @ts-ignore
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
-
 import { createClient } from "@supabase/supabase-js";
-// @ts-ignore – Nexts PageProps buggar i async-funktioner
-export default async function PreviewPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const slug = params.slug;
+
+export default async function PreviewPage({ params }: { params: any }) {
+  const slug = params?.slug;
   console.log("🪄 Förhandsvisar slug:", slug);
 
-  // 🧩 Skapa Supabase-klient direkt i funktionen
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
   if (!supabaseUrl || !supabaseKey) {
     console.error("❌ Saknas env-variabler i Vercel!");
@@ -31,16 +23,13 @@ export default async function PreviewPage({
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
-
   const { data, error } = await supabase
     .from("sites")
     .select("html")
     .eq("slug", slug)
     .maybeSingle();
 
-  if (error) {
-    console.error("❌ Supabase-fel:", error.message);
-  }
+  if (error) console.error("❌ Supabase-fel:", error.message);
 
   if (!data?.html) {
     console.warn("⚠️ Ingen sida hittades för slug:", slug);
