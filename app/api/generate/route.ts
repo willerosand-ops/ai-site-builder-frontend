@@ -19,17 +19,19 @@ export async function POST(req: Request) {
       );
     }
 
-    // 🧠 AI-instruktion (mörkt tema + modern design)
+    // 🧠 AI-instruktion: modern design + mörkt tema + fungerande bilder
     const systemPrompt = `
 Du är en expert på modern webbdesign och använder Tailwind CSS.
 Skapa en komplett, responsiv HTML-sida baserat på användarens idé.
 
 ✨ Krav:
-- Använd mörkt tema (mörk bakgrund och ljus text)
+- Använd mörkt tema (mörk bakgrund, ljus text)
 - Texten ska vara lättläst och ha god kontrast
 - Använd Tailwind-klasser för färger, spacing och layout
-- Lägg till snygga sektioner, rubriker, knappar eller kort om det passar
-- Se till att sidan fungerar bra på mobil
+- Gör sidan responsiv för mobil och desktop
+- Använd snygg textformatering (rubriker, stycken, listor)
+- Använd exempelbilder från https://picsum.photos, t.ex.:
+  <img src="https://picsum.photos/600/400" alt="Exempelbild" />
 - Skriv endast HTML (inga kommentarer eller markdown)
 `;
 
@@ -45,10 +47,10 @@ Skapa en komplett, responsiv HTML-sida baserat på användarens idé.
 
     const rawHtml = completion.choices[0]?.message?.content || "";
 
-    // 🎨 Lägg till wrapper för mörkt tema & centrering
+    // 🎨 Lägg till wrapper för mörkt tema och typografi
     const wrapperStart = `
-      <div class="min-h-screen bg-[#0b1220] text-gray-100 flex flex-col items-center justify-center p-8">
-        <div class="w-full max-w-4xl bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-lg p-8 prose prose-invert">
+      <div class="min-h-screen bg-[#0b1220] text-gray-100 flex flex-col items-center p-8">
+        <div class="prose prose-invert max-w-4xl w-full bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-lg p-8">
     `;
     const wrapperEnd = `
         </div>
@@ -57,7 +59,7 @@ Skapa en komplett, responsiv HTML-sida baserat på användarens idé.
 
     const html = `${wrapperStart}${rawHtml}${wrapperEnd}`;
 
-    // 💾 Spara sidan i Supabase
+    // 💾 Spara i Supabase
     const slug = randomUUID();
     const { error } = await supabase.from("sites").insert([{ html, slug }]);
 
