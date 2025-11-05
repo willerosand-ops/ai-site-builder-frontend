@@ -16,11 +16,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Ingen idé skickades." }, { status: 400 });
     }
 
-    const systemPrompt = `
-    Du är en expert på modern webbdesign och använder Tailwind CSS.
-    Skapa en komplett HTML-sida baserat på användarens idé.
-    Skriv endast HTML (inga kommentarer eller markdown).
-    `;
+   const systemPrompt = `
+Du är en expert på modern webbdesign och använder Tailwind CSS.
+Skapa en komplett, responsiv HTML-sida baserat på användarens idé.
+
+✨ Krav:
+- Använd **mörkt tema** (t.ex. mörk bakgrund och ljus text).
+- Texten ska vara lättläst och ha god kontrast.
+- Använd Tailwind-klasser för färger, spacing och layout.
+- Lägg till snygga sektioner, rubriker, knappar eller kort om det passar.
+- Se till att sidan fungerar bra på mobil.
+- Skriv **endast HTML** (ingen markdown, inga kommentarer).
+`;
 
     // 🧠 Generera sidan med OpenAI
     const completion = await client.chat.completions.create({
