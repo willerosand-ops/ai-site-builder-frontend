@@ -41,14 +41,13 @@ export default async function PreviewPage({ params }: { params: any }) {
   }
 
   console.log("✅ Sida hittad och laddad!");
-  return (
-  <main className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-8">
-    <div className="bg-white/5 backdrop-blur-md p-8 rounded-2xl shadow-lg max-w-4xl w-full">
-      <div
-        className="prose prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: data.html }}
-      />
-    </div>
+ return (
+  <main className="min-h-screen bg-gray-950 text-gray-100">
+    <div
+      className="preview-theme prose prose-invert max-w-4xl mx-auto p-8"
+      dangerouslySetInnerHTML={{ __html: data.html }}
+    />
   </main>
 );
+
 }
